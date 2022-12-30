@@ -1,0 +1,9 @@
+.buttons {
+    position: fixed;
+    z-index: 200;
+    top: 14px;
+    left: 24px;
+}
+
+.buttons button {
+}

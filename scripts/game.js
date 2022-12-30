@@ -1,54 +1,46 @@
-import { drawExistingDots, generateRandomDots } from "./entities/Dot.js";
-import { PlayerTank } from "./entities/PlayerTank.js";
 import { initCanvas } from "./utils/canvas.js";
 import { setUpControls } from "./utils/controls.js";
-import { executeEveryNFrames } from "./utils/flow.js";
+import {
+  initGameObjects,
+  renderGameObjects,
+  updateGameObjects,
+} from "./utils/gameObjects.js";
 
 // * Game Setup Code
-const { canvas: _, context } = initCanvas();
+const { canvas, context } = initCanvas();
 
 const gameState = {
-  players: [
-    new PlayerTank({
-      context,
-      x: 100,
-      y: 100,
-      width: 50,
-      height: 50,
-      color: "red",
-      properties: {
-        speed: 5,
-      },
-    }),
-  ],
-  gamerate: 25,
+  gameObjects: initGameObjects({ context }),
   running: true,
   keys: setUpControls(),
   frame: 0,
-  dots: new Set(),
+  lastFrameTime: Date.now(),
 };
 
-export function runGameLoop() {
+export function initGame() {
+  renderGameObjects({ deltaTime: 0, gameState, context });
+}
+initGame();
+
+export function update() {
   if (gameState.running) {
-    // clear the canvas
+    const currentTime = Date.now();
+    const deltaTime = currentTime - gameState.lastFrameTime;
+    gameState.lastFrameTime = currentTime;
 
-    gameState.players.forEach((player) => {
-      player.updatePositionFromKeys(gameState.keys);
-    });
-
-    executeEveryNFrames(2, gameState.frame, () => {
-      generateRandomDots(context, gameState.dots, 1);
-      drawExistingDots(gameState.dots);
-    });
+    updateGameObjects({ deltaTime, gameState, context });
 
     gameState.frame++;
-    setTimeout(() => {
-      runGameLoop();
-    }, gameState.gamerate);
+    requestAnimationFrame(update);
   }
 }
-runGameLoop();
+// update();
 
 export function stopGameLoop() {
   gameState.running = false;
+}
+
+export function startGameLoop() {
+  gameState.running = true;
+  update();
 }

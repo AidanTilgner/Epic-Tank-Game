@@ -2,11 +2,12 @@ export const initCanvas = () => {
   const GameCanvas = document.getElementById("game-canvas");
   const context = GameCanvas.getContext("2d");
   context.resetTransform();
+  context.imageSmoothingEnabled = true;
 
-  GameCanvas.setAttribute("width", window.innerWidth * 10);
-  GameCanvas.height = window.innerHeight * 10;
+  GameCanvas.setAttribute("width", window.innerWidth);
+  GameCanvas.height = window.innerHeight;
 
-  context.scale(5, 5);
+  // context.scale(2, 2);
 
   return { canvas: GameCanvas, context };
 };
