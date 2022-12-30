@@ -1,0 +1,30 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.game-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ddd;
+  padding: 36px;
+  box-sizing: border-box;
+  box-shadow: 5px 5px 24px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+#game-canvas {
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+  object-fit: contain;
+  object-position: center;
+  box-sizing: border-box;
+  image-rendering: crisp-edges;
+}
