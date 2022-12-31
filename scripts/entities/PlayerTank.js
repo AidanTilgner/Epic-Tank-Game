@@ -8,7 +8,7 @@ export class PlayerTank {
     this.properties = properties;
     this.context = context;
 
-    this.context.canvas.addEventListener("mousemove", (event) => {
+    window.addEventListener("mousemove", (event) => {
       this.mousePosition = {
         x: event.clientX,
         y: event.clientY,
