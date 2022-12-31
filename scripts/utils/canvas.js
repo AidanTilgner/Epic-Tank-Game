@@ -1,13 +1,14 @@
 export const initCanvas = () => {
   const TankCanvas = document.getElementById("tank-canvas");
-  const context = TankCanvas.getContext("2d");
-  context.resetTransform();
-  context.imageSmoothingEnabled = true;
+  const BulletCanvas = document.getElementById("bullet-canvas");
+  const tankContext = TankCanvas.getContext("2d");
+  tankContext.resetTransform();
+  tankContext.imageSmoothingEnabled = true;
 
   TankCanvas.setAttribute("width", window.innerWidth);
   TankCanvas.height = window.innerHeight;
 
-  // context.scale(2, 2);
+  // tankContext.scale(2, 2);
 
-  return { canvas: TankCanvas, context };
+  return { tank_canvas: TankCanvas, tank_context: tankContext };
 };

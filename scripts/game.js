@@ -7,10 +7,10 @@ import {
 } from "./utils/gameObjects.js";
 
 // * Game Setup Code
-const { canvas, context } = initCanvas();
+const { tank_canvas, tank_context } = initCanvas();
 
 const gameState = {
-  gameObjects: initGameObjects({ context }),
+  gameObjects: initGameObjects({ tank_context }),
   running: true,
   keys: setUpControls(),
   frame: 0,
@@ -18,7 +18,7 @@ const gameState = {
 };
 
 export function initGame() {
-  renderGameObjects({ deltaTime: 0, gameState, context });
+  renderGameObjects({ deltaTime: 0, gameState, tank_context });
 }
 initGame();
 
@@ -28,7 +28,7 @@ export function update() {
     const deltaTime = currentTime - gameState.lastFrameTime;
     gameState.lastFrameTime = currentTime;
 
-    updateGameObjects({ deltaTime, gameState, context });
+    updateGameObjects({ deltaTime, gameState, tank_context });
 
     gameState.frame++;
     requestAnimationFrame(update);
