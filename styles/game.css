@@ -12,19 +12,20 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #ddd;
-  padding: 36px;
+  background-color: #fff;
   box-sizing: border-box;
   box-shadow: 5px 5px 24px rgba(0, 0, 0, 0.15);
   position: relative;
 }
 
-#tank-canvas {
-  height: 100%;
-  width: 100%;
-  background-color: #fff;
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   object-fit: contain;
   object-position: center;
   box-sizing: border-box;
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
