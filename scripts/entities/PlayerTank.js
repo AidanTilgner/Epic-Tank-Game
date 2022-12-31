@@ -1,15 +1,23 @@
 export class PlayerTank {
   constructor({ context, x, y, color, properties }) {
-    this.previousPosition = { x, y };
     this.position = { x, y };
+    this.mousePosition = { x: 0, y: 0 };
     this.width = 25;
     this.height = 25;
     this.color = color;
     this.properties = properties;
     this.context = context;
+
+    this.context.canvas.addEventListener("mousemove", (event) => {
+      this.mousePosition = {
+        x: event.clientX,
+        y: event.clientY,
+      };
+      this.redraw();
+    });
   }
 
-  draw() {
+  drawBody() {
     this.context.fillStyle = this.color;
     this.context.beginPath();
     this.context.ellipse(
@@ -24,26 +32,42 @@ export class PlayerTank {
     this.context.fill();
   }
 
-  undraw() {
-    // clear the previous ellipse, by drawing another ellipse over it
-    this.context.fillStyle = "white";
-    this.context.beginPath();
-    this.context.ellipse(
-      this.previousPosition.x,
-      this.previousPosition.y,
-      this.width + 1,
-      this.height + 1,
-      0,
-      0,
-      2 * Math.PI
+  drawBarrel() {
+    const angle = Math.atan2(
+      this.mousePosition.y - this.position.y,
+      this.mousePosition.x - this.position.x
     );
-    this.context.fill();
-    this.previousPosition = { ...this.position };
+    this.context.save();
+    // the barrel should be half the width of the tank, and be centered on the tank
+    this.context.translate(this.position.x, this.position.y);
+    this.context.rotate(angle);
+    this.context.fillStyle = "black";
+    this.context.fillRect(0, -this.width / 4, this.width * 2, this.width / 2);
+    this.context.restore();
+  }
+
+  draw() {
+    this.drawBarrel();
+    this.drawBody();
+  }
+
+  undraw() {
+    // clear the canvas in the area of the tank, but with enough space to clear the barrel
+    this.context.clearRect(
+      this.position.x - (this.width * 4),
+      this.position.y - (this.height * 4),
+      this.width * 8,
+      this.height * 8
+    );
   }
 
   redraw() {
     this.undraw();
     this.draw();
+
+    requestAnimationFrame(() => {
+      this.redraw();
+    });
   }
 
   update({ keys, deltaTime }) {
