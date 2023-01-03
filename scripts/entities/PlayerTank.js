@@ -7,6 +7,8 @@ export class PlayerTank {
     this.color = color;
     this.properties = properties;
     this.context = context;
+    this.showLaser = false;
+    this.shootBullet = shootBullet;
 
     window.addEventListener("mousemove", (event) => {
       this.mousePosition = {
@@ -17,15 +19,31 @@ export class PlayerTank {
     });
 
     window.addEventListener("click", (event) => {
-      shootBullet({
-        fromX: this.position.x,
-        fromY: this.position.y,
-        toX: this.mousePosition.x,
-        toY: this.mousePosition.y,
-        properties: {
-          speed: this.properties.bullet_speed || 1,
-        },
-      });
+      this.shoot();
+    });
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "l") {
+        this.showLaser = !this.showLaser;
+        this.redraw();
+      }
+
+      if (event.key === " ") {
+        this.shoot();
+      }
+    });
+  }
+
+  shoot() {
+    // shoot a bullet
+    this.shootBullet({
+      fromX: this.position.x,
+      fromY: this.position.y,
+      toX: this.mousePosition.x,
+      toY: this.mousePosition.y,
+      properties: {
+        speed: this.properties.bullet_speed || 1,
+      },
     });
   }
 
@@ -58,18 +76,39 @@ export class PlayerTank {
     this.context.restore();
   }
 
+  drawLaser() {
+    if (!this.showLaser) return;
+    // basically a line between the tank center and the mouse position, opacity should be 0.5
+    this.context.save();
+    this.context.beginPath();
+    this.context.moveTo(this.position.x, this.position.y);
+    this.context.lineTo(this.mousePosition.x, this.mousePosition.y);
+    this.context.strokeStyle = "rgba(255, 0, 0, 0.5)";
+    this.context.stroke();
+    this.context.restore();
+  }
+
   draw() {
     this.drawBarrel();
     this.drawBody();
+    this.drawLaser();
   }
 
   undraw() {
     // clear the canvas in the area of the tank, but with enough space to clear the barrel
+    // this.context.clearRect(
+    //   this.position.x - this.width * 4,
+    //   this.position.y - this.height * 4,
+    //   this.width * 8,
+    //   this.height * 8
+    // );
+
+    // clear the entire canvas
     this.context.clearRect(
-      this.position.x - this.width * 4,
-      this.position.y - this.height * 4,
-      this.width * 8,
-      this.height * 8
+      0,
+      0,
+      this.context.canvas.width,
+      this.context.canvas.height
     );
   }
 
@@ -87,10 +126,14 @@ export class PlayerTank {
     }
   }
 
-  updatePositionFromKeys(keys, deltaTime) {
-    const speed = Math.round(
+  getSpeed({ deltaTime }) {
+    return Math.round(
       (Math.ceil((this.properties.speed || 1) * 10) * deltaTime) / 150
     );
+  }
+
+  updatePositionFromKeys(keys, deltaTime) {
+    const speed = this.getSpeed({ deltaTime });
 
     let updated = false;
     if (keys.LEFT.pressed) {

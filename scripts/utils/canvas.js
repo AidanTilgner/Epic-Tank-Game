@@ -4,7 +4,7 @@ export const initCanvas = () => {
   tankContext.resetTransform();
   tankContext.imageSmoothingEnabled = true;
 
-  TankCanvas.setAttribute("width", window.innerWidth);
+  TankCanvas.width = window.innerWidth;
   TankCanvas.height = window.innerHeight;
 
   const BulletCanvas = document.getElementById("bullet-canvas");
@@ -12,15 +12,23 @@ export const initCanvas = () => {
   bulletContext.resetTransform();
   bulletContext.imageSmoothingEnabled = true;
 
-  BulletCanvas.setAttribute("width", window.innerWidth);
+  BulletCanvas.width = window.innerWidth;
   BulletCanvas.height = window.innerHeight;
 
-  // tankContext.scale(2, 2);
+  const EnemyCanvas = document.getElementById("enemy-canvas");
+  const enemyContext = EnemyCanvas.getContext("2d");
+  enemyContext.resetTransform();
+  enemyContext.imageSmoothingEnabled = true;
+
+  EnemyCanvas.width = window.innerWidth;
+  EnemyCanvas.height = window.innerHeight;
 
   return {
     tank_canvas: TankCanvas,
     tank_context: tankContext,
     bullet_canvas: BulletCanvas,
     bullet_context: bulletContext,
+    enemy_canvas: EnemyCanvas,
+    enemy_context: enemyContext,
   };
 };
