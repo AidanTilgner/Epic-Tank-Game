@@ -1,3 +1,5 @@
+import { stopGameLoop } from "../game.js";
+
 export const initCanvas = () => {
   const TankCanvas = document.getElementById("tank-canvas");
   const tankContext = TankCanvas.getContext("2d");
@@ -23,6 +25,8 @@ export const initCanvas = () => {
   EnemyCanvas.width = window.innerWidth;
   EnemyCanvas.height = window.innerHeight;
 
+  initCanvasEventListeners();
+
   return {
     tank_canvas: TankCanvas,
     tank_context: tankContext,
@@ -31,4 +35,10 @@ export const initCanvas = () => {
     enemy_canvas: EnemyCanvas,
     enemy_context: enemyContext,
   };
+};
+
+export const initCanvasEventListeners = () => {
+  document.addEventListener("player_death", (e) => {
+    stopGameLoop();
+  });
 };

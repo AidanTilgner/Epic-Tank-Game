@@ -1,6 +1,15 @@
 export class Blobber {
   // this is an enemy. It is a blob that moves around the screen and if it hits the player, it kills them.
-  constructor({ context, x, y, color, properties, shootBullet, gameState }) {
+  constructor({
+    context,
+    x,
+    y,
+    color,
+    properties,
+    shootBullet,
+    gameState,
+    killPlayer,
+  }) {
     this.context = context;
     this.position = { x, y };
     this.width = 25;
@@ -10,6 +19,7 @@ export class Blobber {
     this.shootBullet = shootBullet;
     this.health = 100;
     this.gameState = gameState;
+    this.killPlayer = killPlayer;
   }
 
   drawBody() {
@@ -46,8 +56,38 @@ export class Blobber {
     );
   }
 
+  checkCollisionWithPlayer() {
+    const playerX = this.gameState.gameObjects.player.position.x;
+    const playerY = this.gameState.gameObjects.player.position.y;
+
+    const distance = Math.floor(Math.sqrt(
+      (playerX - this.position.x) ** 2 + (playerY - this.position.y) ** 2
+    ))
+
+    if (distance < this.width) {
+      this.killPlayer();
+      return true;
+    }
+
+    return false;
+  }
+
+  checkPlayerIsAlive() {
+    const health = this.gameState.gameObjects.player.health;
+
+    if (health <= 0) {
+      return false;
+    }
+
+    return true;
+  }
+
   update({ deltaTime }) {
     this.speed = this.getSpeed({ deltaTime });
+    if (!this.checkPlayerIsAlive()) {
+      return;
+    }
+    this.checkCollisionWithPlayer();
     this.undraw();
     // get the direction to the player
     const playerX = this.gameState.gameObjects.player.position.x;

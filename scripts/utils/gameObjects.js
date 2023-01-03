@@ -77,6 +77,9 @@ export function addEnemies({ gameState }) {
         gameObjects.bullets.set(bullet.id, bullet);
       },
       gameState,
+      killPlayer: async () => {
+        gameState.gameObjects.player.die();
+      },
     });
     gameState.gameObjects.enemies.set(enemy.id, enemy);
   }

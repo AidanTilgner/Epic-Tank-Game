@@ -9,6 +9,7 @@ export class PlayerTank {
     this.context = context;
     this.showLaser = false;
     this.shootBullet = shootBullet;
+    this.health = this.properties.max_health || 100;
 
     window.addEventListener("mousemove", (event) => {
       this.mousePosition = {
@@ -92,6 +93,21 @@ export class PlayerTank {
     this.drawBarrel();
     this.drawBody();
     this.drawLaser();
+  }
+
+  async die() {
+    console.log("DIE!");
+
+    this.undraw();
+
+    // remove the tank from the game
+    document.dispatchEvent(
+      new CustomEvent("player_death", {
+        detail: {
+          entity: this,
+        },
+      })
+    );
   }
 
   undraw() {
