@@ -1,5 +1,5 @@
 export class PlayerTank {
-  constructor({ context, x, y, color, properties }) {
+  constructor({ context, x, y, color, properties, shootBullet }) {
     this.position = { x, y };
     this.mousePosition = { x: 0, y: 0 };
     this.width = 25;
@@ -14,6 +14,18 @@ export class PlayerTank {
         y: event.clientY,
       };
       this.redraw();
+    });
+
+    window.addEventListener("click", (event) => {
+      shootBullet({
+        fromX: this.position.x,
+        fromY: this.position.y,
+        toX: this.mousePosition.x,
+        toY: this.mousePosition.y,
+        properties: {
+          speed: this.properties.bullet_speed || 1,
+        },
+      });
     });
   }
 
@@ -54,8 +66,8 @@ export class PlayerTank {
   undraw() {
     // clear the canvas in the area of the tank, but with enough space to clear the barrel
     this.context.clearRect(
-      this.position.x - (this.width * 4),
-      this.position.y - (this.height * 4),
+      this.position.x - this.width * 4,
+      this.position.y - this.height * 4,
       this.width * 8,
       this.height * 8
     );
@@ -64,10 +76,6 @@ export class PlayerTank {
   redraw() {
     this.undraw();
     this.draw();
-
-    requestAnimationFrame(() => {
-      this.redraw();
-    });
   }
 
   update({ keys, deltaTime }) {
@@ -81,7 +89,7 @@ export class PlayerTank {
 
   updatePositionFromKeys(keys, deltaTime) {
     const speed = Math.round(
-      (Math.ceil((this.properties.speed || 1) * 10) * deltaTime) / 100
+      (Math.ceil((this.properties.speed || 1) * 10) * deltaTime) / 150
     );
 
     let updated = false;

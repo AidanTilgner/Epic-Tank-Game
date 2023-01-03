@@ -17,5 +17,10 @@ export const initCanvas = () => {
 
   // tankContext.scale(2, 2);
 
-  return { tank_canvas: TankCanvas, tank_context: tankContext };
+  return {
+    tank_canvas: TankCanvas,
+    tank_context: tankContext,
+    bullet_canvas: BulletCanvas,
+    bullet_context: bulletContext,
+  };
 };

@@ -7,10 +7,15 @@ import {
 } from "./utils/gameObjects.js";
 
 // * Game Setup Code
-const { tank_canvas, tank_context } = initCanvas();
+const { tank_canvas, tank_context, bullet_canvas, bullet_context } =
+  initCanvas();
 
 const gameState = {
-  gameObjects: initGameObjects({ tank_context }),
+  contexts: {
+    tank_context,
+    bullet_context,
+  },
+  gameObjects: initGameObjects({ tank_context, bullet_context }),
   running: true,
   keys: setUpControls(),
   frame: 0,
